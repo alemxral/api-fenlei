@@ -64,7 +64,7 @@ def classify_single_image():
             
             return jsonify({
                 'status': 'success',
-                'filename': secure_filename(file.filename),
+                'filename': secure_filename(file.filename or 'unknown'),
                 'predictions': predictions,
                 'total_predictions': len(predictions)
             }), 200

@@ -31,6 +31,7 @@ def validate_image_file(file):
     Raises:
         ValueError: If the file is not a valid image
     """
+    position = 0
     try:
         # Save current position
         position = file.tell()
@@ -86,6 +87,7 @@ def get_image_info(file):
     Returns:
         Dictionary with image information
     """
+    position = 0
     try:
         position = file.tell()
         img = Image.open(io.BytesIO(file.read()))
