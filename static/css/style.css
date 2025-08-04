@@ -1,0 +1,153 @@
+/* Custom styles for the image classification app */
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+    background-color: var(--bs-gray-800);
+    border-bottom: 1px solid var(--bs-gray-700);
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Preview images */
+.preview-img {
+    max-height: 200px;
+    object-fit: contain;
+    border: 1px solid var(--bs-gray-700);
+}
+
+/* Result cards */
+.result-card {
+    border-left: 4px solid var(--bs-primary);
+}
+
+.batch-result-card {
+    border-left: 4px solid var(--bs-info);
+}
+
+/* Confidence bars */
+.confidence-bar {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--bs-success) 0%, var(--bs-warning) 50%, var(--bs-danger) 100%);
+    transition: width 0.3s ease;
+}
+
+/* Status indicators */
+.status-healthy {
+    color: var(--bs-success);
+}
+
+.status-unhealthy {
+    color: var(--bs-danger);
+}
+
+.status-loading {
+    color: var(--bs-info);
+}
+
+/* File upload styling */
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Error states */
+.error-card {
+    border-left: 4px solid var(--bs-danger);
+}
+
+/* Progress bars for batch processing */
+.batch-progress {
+    background-color: var(--bs-gray-700);
+}
+
+.batch-progress .progress-bar {
+    background-color: var(--bs-primary);
+}
+
+/* Image grid for batch results */
+.batch-image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.batch-image-item {
+    text-align: center;
+}
+
+.batch-image-item img {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .batch-image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+/* Code blocks */
+code {
+    color: var(--bs-info);
+    font-size: 0.875rem;
+}
+
+.bg-dark code {
+    color: var(--bs-light);
+}
+
+/* Hover effects */
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+/* Loading spinner overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    border-radius: 0.375rem;
+}
+
+.position-relative {
+    position: relative;
+}
