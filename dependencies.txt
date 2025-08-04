@@ -1,0 +1,35 @@
+# Image Classification API Dependencies
+# Copy this content to requirements.txt when running locally
+
+# Flask web framework and related packages
+Flask>=2.3.0
+Werkzeug>=2.3.0
+
+# Machine Learning packages
+tensorflow>=2.15.0
+numpy>=1.24.0,<2.0.0
+Pillow>=9.0.0
+
+# Database support (optional - already included in project)
+Flask-SQLAlchemy>=3.0.0
+psycopg2-binary>=2.9.0
+
+# Email validation (optional - already included in project)
+email-validator>=2.0.0
+
+# Production server
+gunicorn>=21.0.0
+
+# Installation instructions:
+# For local development:
+# pip install -r requirements.txt
+#
+# For virtual environment:
+# python -m venv venv
+# source venv/bin/activate  # On Windows: venv\Scripts\activate
+# pip install -r requirements.txt
+#
+# To run the application locally:
+# python main.py
+# or
+# gunicorn --bind 0.0.0.0:5000 main:app
