@@ -4,6 +4,11 @@
 > Try it online now: https://api-fenlei-production.up.railway.app/
 > (Hosted on Railway — free plan; the first request may be slow after inactivity)
 
+
+<video src="video.webm" controls width="600">
+  Your browser does not support the video tag.
+</video>
+
 ![Web Interface Screenshot](screenshot.png)
 
 A simple Flask REST API for image classification using a pre-trained MobileNetV2 model (TensorFlow/Keras). It includes a modern web interface, batch image processing, and solid error handling. You can run it on Replit, locally, Docker, or Railway.
@@ -15,8 +20,7 @@ A simple Flask REST API for image classification using a pre-trained MobileNetV2
 ### Try Online
 - Open the live app: https://api-fenlei-production.up.railway.app/
 
-### On Replit
-- The app is already set up. Click Run.
+
 
 ### Local Installation
 1. Clone or download the project
