@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 import logging
+import time
 from ml_classifier import classifier
 from utils import validate_image_file, allowed_file
+from prediction_logger import prediction_logger
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +62,19 @@ def classify_single_image():
         
         # Classify the image
         try:
+            start_time = time.time()
             predictions = classifier.classify_image(file, top_k=top_k)
+            processing_time = time.time() - start_time
+            
+            # Log the prediction
+            user_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.environ.get('REMOTE_ADDR'))
+            prediction_logger.log_prediction(
+                filename=file.filename or 'unknown',
+                predictions=predictions,
+                request_type="single",
+                user_ip=user_ip,
+                processing_time=processing_time
+            )
             
             return jsonify({
                 'status': 'success',
@@ -155,7 +169,17 @@ def classify_batch_images():
         
         # Classify the images
         try:
+            start_time = time.time()
             results = classifier.classify_batch(valid_files, top_k=top_k)
+            processing_time = time.time() - start_time
+            
+            # Log the batch predictions
+            user_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.environ.get('REMOTE_ADDR'))
+            prediction_logger.log_batch_predictions(
+                batch_results=results,
+                user_ip=user_ip,
+                processing_time=processing_time
+            )
             
             return jsonify({
                 'status': 'success',
@@ -245,3 +269,69 @@ def api_info():
             'max_predictions': 10
         }
     }), 200
+
+@api_bp.route('/logs', methods=['GET'])
+def get_prediction_logs():
+    """Get prediction history logs"""
+    try:
+        limit = request.args.get('limit', default=50, type=int)
+        limit = min(limit, 500)  # Cap at 500 to prevent large responses
+        
+        logs = prediction_logger.get_recent_logs(limit)
+        statistics = prediction_logger.get_statistics()
+        
+        return jsonify({
+            'status': 'success',
+            'logs': logs,
+            'statistics': statistics,
+            'total_logs': len(logs)
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error retrieving logs: {str(e)}")
+        return jsonify({
+            'error': 'Failed to retrieve logs',
+            'message': f'Error retrieving prediction logs: {str(e)}'
+        }), 500
+
+@api_bp.route('/logs/statistics', methods=['GET'])
+def get_prediction_statistics():
+    """Get prediction statistics"""
+    try:
+        statistics = prediction_logger.get_statistics()
+        
+        return jsonify({
+            'status': 'success',
+            'statistics': statistics
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error retrieving statistics: {str(e)}")
+        return jsonify({
+            'error': 'Failed to retrieve statistics',
+            'message': f'Error retrieving prediction statistics: {str(e)}'
+        }), 500
+
+@api_bp.route('/logs/clear', methods=['POST'])
+def clear_prediction_logs():
+    """Clear all prediction logs (admin function)"""
+    try:
+        success = prediction_logger.clear_logs()
+        
+        if success:
+            return jsonify({
+                'status': 'success',
+                'message': 'All prediction logs have been cleared'
+            }), 200
+        else:
+            return jsonify({
+                'error': 'Failed to clear logs',
+                'message': 'Could not clear prediction logs'
+            }), 500
+            
+    except Exception as e:
+        logger.error(f"Error clearing logs: {str(e)}")
+        return jsonify({
+            'error': 'Failed to clear logs',
+            'message': f'Error clearing prediction logs: {str(e)}'
+        }), 500

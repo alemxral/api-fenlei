@@ -18,7 +18,30 @@
                         <i class="fas fa-brain me-3"></i>
                         Image Classification API
                     </h1>
-                    <p class="lead">Upload images to classify them using a pre-trained MobileNetV2 model</p>
+                    <p class="lead mb-2">Upload images to classify them using a pre-trained MobileNetV2 model</p>
+                    
+                    <!-- Project Information -->
+                    <div class="mb-4">
+                        <div class="card bg-dark border-secondary">
+                            <div class="card-body py-3">
+                                <h6 class="card-title text-primary mb-2">
+                                    <i class="fas fa-graduation-cap me-2"></i>
+                                    Academic Project
+                                </h6>
+                                <div class="text-muted">
+                                    <small class="d-block mb-1">
+                                        <strong>Subject:</strong> DLBDSMTP01 – Project: From Model to Production
+                                    </small>
+                                    <small class="d-block mb-1">
+                                        <strong>Task:</strong> Task 2: Image classification for a refund department (spotlight: Batch processing)
+                                    </small>
+                                    <small class="d-block">
+                                        <strong>Author:</strong> <span class="text-info">Alejandro Moral Aranda</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,9 +66,35 @@
             </div>
         </div>
 
-        <!-- Upload Forms -->
-        <div class="row">
-            <!-- Single Image Upload -->
+        <!-- Navigation Tabs -->
+        <div class="row mb-4">
+            <div class="col">
+                <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="classify-tab" data-bs-toggle="tab" 
+                                data-bs-target="#classify-panel" type="button" role="tab">
+                            <i class="fas fa-upload me-2"></i>
+                            Image Classification
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" 
+                                data-bs-target="#history-panel" type="button" role="tab">
+                            <i class="fas fa-history me-2"></i>
+                            Prediction History
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabContent">
+            <!-- Classification Tab -->
+            <div class="tab-pane fade show active" id="classify-panel" role="tabpanel">
+                <!-- Upload Forms -->
+                <div class="row">
+                    <!-- Single Image Upload -->
             <div class="col-lg-6 mb-4">
                 <div class="card h-100">
                     <div class="card-header">
@@ -154,50 +203,178 @@
             </div>
         </div>
 
-        <!-- API Documentation -->
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-book me-2"></i>
-                            API Documentation
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6>Single Image Classification</h6>
-                                <div class="bg-dark p-3 rounded">
-                                    <code>
-                                        POST /api/classify<br>
-                                        Content-Type: multipart/form-data<br>
-                                        Body: image=&lt;file&gt;&amp;top_k=5
-                                    </code>
-                                </div>
+                <!-- API Documentation -->
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-book me-2"></i>
+                                    API Documentation
+                                </h5>
                             </div>
-                            <div class="col-md-6">
-                                <h6>Batch Classification</h6>
-                                <div class="bg-dark p-3 rounded">
-                                    <code>
-                                        POST /api/classify/batch<br>
-                                        Content-Type: multipart/form-data<br>
-                                        Body: images=&lt;files&gt;&amp;top_k=5
-                                    </code>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Single Image Classification</h6>
+                                        <div class="bg-dark p-3 rounded">
+                                            <code>
+                                                POST /api/classify<br>
+                                                Content-Type: multipart/form-data<br>
+                                                Body: image=&lt;file&gt;&amp;top_k=5
+                                            </code>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Batch Classification</h6>
+                                        <div class="bg-dark p-3 rounded">
+                                            <code>
+                                                POST /api/classify/batch<br>
+                                                Content-Type: multipart/form-data<br>
+                                                Body: images=&lt;files&gt;&amp;top_k=5
+                                            </code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6>Health Check</h6>
+                                        <div class="bg-dark p-3 rounded">
+                                            <code>GET /api/health</code>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>API Information</h6>
+                                        <div class="bg-dark p-3 rounded">
+                                            <code>GET /api/info</code>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <h6>Health Check</h6>
-                                <div class="bg-dark p-3 rounded">
-                                    <code>GET /api/health</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-pane fade" id="history-panel" role="tabpanel">
+                <!-- Statistics Overview -->
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-pie me-2"></i>
+                                    Statistics Overview
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row" id="statistics-container">
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <h4 class="text-primary" id="stat-total">-</h4>
+                                            <small class="text-muted">Total Predictions</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <h4 class="text-success" id="stat-today">-</h4>
+                                            <small class="text-muted">Today</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <h4 class="text-info" id="stat-single">-</h4>
+                                            <small class="text-muted">Single Requests</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <h4 class="text-warning" id="stat-batch">-</h4>
+                                            <small class="text-muted">Batch Requests</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <h4 class="text-secondary" id="stat-confidence">-</h4>
+                                            <small class="text-muted">Avg Confidence</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <h6 class="text-primary" id="stat-common">-</h6>
+                                            <small class="text-muted">Most Common</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <h6>API Information</h6>
-                                <div class="bg-dark p-3 rounded">
-                                    <code>GET /api/info</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Controls -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" id="refresh-history-btn">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-outline-danger" id="clear-history-btn">
+                                <i class="fas fa-trash me-2"></i>
+                                Clear History
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <select class="form-select" id="history-limit">
+                                <option value="25">Last 25</option>
+                                <option value="50" selected>Last 50</option>
+                                <option value="100">Last 100</option>
+                                <option value="500">Last 500</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" id="load-history-btn">
+                                Load
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction History Table -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-table me-2"></i>
+                                    Prediction History
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Timestamp</th>
+                                                <th>Filename</th>
+                                                <th>Type</th>
+                                                <th>Top Prediction</th>
+                                                <th>Confidence</th>
+                                                <th>Processing Time</th>
+                                                <th>User IP</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="history-table-body">
+                                            <tr>
+                                                <td colspan="8" class="text-center text-muted">
+                                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                                    Loading prediction history...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -206,6 +383,61 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark border-top mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-primary">
+                        <i class="fas fa-university me-2"></i>
+                        Academic Project Information
+                    </h6>
+                    <small class="text-muted">
+                        <div class="mb-1">
+                            <strong>Subject Code:</strong> DLBDSMTP01
+                        </div>
+                        <div class="mb-1">
+                            <strong>Subject Name:</strong> Project: From Model to Production
+                        </div>
+                        <div class="mb-1">
+                            <strong>Assignment:</strong> Task 2: Image classification for a refund department
+                        </div>
+                        <div>
+                            <strong>Focus:</strong> Batch processing implementation
+                        </div>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary">
+                        <i class="fas fa-user me-2"></i>
+                        Project Author
+                    </h6>
+                    <div class="mb-3">
+                        <span class="text-info h6">Alejandro Moral Aranda</span>
+                    </div>
+                    <small class="text-muted">
+                        <div class="mb-1">
+                            <strong>Technology Stack:</strong> Flask, TensorFlow, MobileNetV2, Bootstrap
+                        </div>
+                        <div>
+                            <strong>Features:</strong> Single/Batch Classification, Prediction History, REST API
+                        </div>
+                    </small>
+                </div>
+            </div>
+            <hr class="border-secondary my-3">
+            <div class="row">
+                <div class="col text-center">
+                    <small class="text-muted">
+                        © 2025 Alejandro Moral Aranda | 
+                        Academic Project - DLBDSMTP01 | 
+                        <i class="fas fa-code me-1"></i> Built with Flask & TensorFlow
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

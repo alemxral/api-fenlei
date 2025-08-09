@@ -3,22 +3,31 @@
 This is an image classification API that uses a pre-trained MobileNetV2 model to classify uploaded images. The application provides a Flask-based REST API with a web interface for users to upload single images or batches of images for classification. It leverages TensorFlow and the ImageNet dataset to provide predictions with confidence scores.
 
 ## Project Status
-- **Status**: ✅ Complete and running
-- **Last Updated**: August 4, 2025
-- **Version**: 1.0.0
-- **Current State**: Production-ready with full functionality
+- **Status**: ✅ Complete and running with dual framework support
+- **Last Updated**: August 9, 2025
+- **Version**: 2.0.0
+- **Current State**: Production-ready with Flask and Streamlit support
+- **New Features**: Automatic framework fallback, Streamlit dashboard, Enhanced logging
 
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
 
+## Project Attribution
+- **Author**: Alejandro Moral Aranda
+- **Academic Subject**: DLBDSMTP01 – Project: From Model to Production
+- **Assignment**: Task 2: Image classification for a refund department (spotlight: Batch processing)
+- **Institution**: Academic project for machine learning deployment course
+
 # System Architecture
 
 ## Frontend Architecture
-- **Web Interface**: Single-page application using Bootstrap 5 with dark theme
-- **Client-side Logic**: Vanilla JavaScript for handling file uploads, API interactions, and UI updates
-- **File Preview**: Real-time image preview functionality for user feedback
-- **Responsive Design**: Mobile-friendly interface with Bootstrap grid system
+- **Dual Framework Support**: Flask web interface + Streamlit dashboard
+- **Flask Interface**: Single-page application using Bootstrap 5 with dark theme
+- **Streamlit Interface**: Interactive dashboard with real-time updates and data visualization
+- **Client-side Logic**: Vanilla JavaScript for Flask, Python widgets for Streamlit
+- **File Preview**: Real-time image preview functionality in both interfaces
+- **Responsive Design**: Mobile-friendly interface with Bootstrap (Flask) and Streamlit responsive components
 
 ## Backend Architecture
 - **Framework**: Flask with Blueprint pattern for modular route organization

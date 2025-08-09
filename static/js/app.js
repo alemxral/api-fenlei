@@ -9,6 +9,7 @@ class ImageClassificationApp {
     init() {
         this.checkApiHealth();
         this.setupEventListeners();
+        this.loadPredictionHistory();
     }
 
     setupEventListeners() {
@@ -32,6 +33,24 @@ class ImageClassificationApp {
         // Batch image count
         document.getElementById('batch-images').addEventListener('change', (e) => {
             this.updateBatchCount(e.target.files.length);
+        });
+
+        // History tab event listeners
+        document.getElementById('refresh-history-btn').addEventListener('click', () => {
+            this.loadPredictionHistory();
+        });
+
+        document.getElementById('load-history-btn').addEventListener('click', () => {
+            this.loadPredictionHistory();
+        });
+
+        document.getElementById('clear-history-btn').addEventListener('click', () => {
+            this.clearPredictionHistory();
+        });
+
+        // Tab switch event listener
+        document.getElementById('history-tab').addEventListener('shown.bs.tab', () => {
+            this.loadPredictionHistory();
         });
     }
 
@@ -351,6 +370,172 @@ class ImageClassificationApp {
                 <i class="fas fa-${icon} me-2"></i>
                 ${text}
             `;
+        }
+    }
+
+    async loadPredictionHistory() {
+        const tableBody = document.getElementById('history-table-body');
+        const limit = document.getElementById('history-limit').value;
+        
+        // Show loading state
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center text-muted">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    Loading prediction history...
+                </td>
+            </tr>
+        `;
+
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/logs?limit=${limit}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                this.displayPredictionHistory(data.logs);
+                this.updateStatistics(data.statistics);
+            } else {
+                throw new Error(data.message || 'Failed to load history');
+            }
+        } catch (error) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error loading history: ${error.message}
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    displayPredictionHistory(logs) {
+        const tableBody = document.getElementById('history-table-body');
+
+        if (!logs || logs.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No prediction history available
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        // Sort logs by ID descending (newest first)
+        logs.sort((a, b) => b.id - a.id);
+
+        const tableRows = logs.map(log => {
+            const timestamp = new Date(log.timestamp).toLocaleString();
+            const processingTime = log.processing_time ? `${(log.processing_time * 1000).toFixed(0)}ms` : 'N/A';
+            const userIp = log.user_ip || 'N/A';
+            const confidence = log.top_prediction.confidence_percentage || '0.00%';
+            
+            // Color code confidence
+            let confidenceClass = 'text-danger';
+            const confValue = parseFloat(confidence);
+            if (confValue >= 70) confidenceClass = 'text-success';
+            else if (confValue >= 40) confidenceClass = 'text-warning';
+
+            // Color code request type
+            const typeClass = log.request_type === 'single' ? 'badge bg-primary' : 'badge bg-info';
+
+            return `
+                <tr>
+                    <td>#${log.id}</td>
+                    <td>
+                        <small>${timestamp}</small>
+                    </td>
+                    <td>
+                        <span class="text-truncate" style="max-width: 150px; display: inline-block;" 
+                              title="${log.filename}">
+                            ${log.filename}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="${typeClass}">${log.request_type}</span>
+                    </td>
+                    <td>
+                        <strong>${log.top_prediction.class_name}</strong>
+                    </td>
+                    <td>
+                        <span class="${confidenceClass}">
+                            <strong>${confidence}</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <small class="text-muted">${processingTime}</small>
+                    </td>
+                    <td>
+                        <small class="text-muted">${userIp}</small>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        tableBody.innerHTML = tableRows;
+    }
+
+    updateStatistics(stats) {
+        if (!stats) return;
+
+        document.getElementById('stat-total').textContent = stats.total_predictions || '0';
+        document.getElementById('stat-today').textContent = stats.today_predictions || '0';
+        document.getElementById('stat-single').textContent = stats.single_requests || '0';
+        document.getElementById('stat-batch').textContent = stats.batch_requests || '0';
+        document.getElementById('stat-confidence').textContent = `${stats.average_confidence || 0}%`;
+        document.getElementById('stat-common').textContent = stats.most_common_class || 'N/A';
+    }
+
+    async clearPredictionHistory() {
+        if (!confirm('Are you sure you want to clear all prediction history? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/logs/clear`, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Reload the history to show empty state
+                this.loadPredictionHistory();
+                
+                // Show success message
+                const tableBody = document.getElementById('history-table-body');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Prediction history cleared successfully
+                        </td>
+                    </tr>
+                `;
+
+                // Reset statistics
+                this.updateStatistics({
+                    total_predictions: 0,
+                    today_predictions: 0,
+                    single_requests: 0,
+                    batch_requests: 0,
+                    average_confidence: 0,
+                    most_common_class: 'N/A'
+                });
+
+                // Reload after a short delay
+                setTimeout(() => {
+                    this.loadPredictionHistory();
+                }, 2000);
+
+            } else {
+                throw new Error(data.message || 'Failed to clear history');
+            }
+        } catch (error) {
+            alert(`Error clearing history: ${error.message}`);
         }
     }
 }

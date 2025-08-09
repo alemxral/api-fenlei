@@ -2,7 +2,7 @@
 name = "repl-nix-workspace"
 version = "0.1.0"
 description = "Add your description here"
-python = "^3.11"
+requires-python = ">=3.11"
 dependencies = [
     "email-validator>=2.2.0",
     "flask>=3.1.1",
@@ -11,6 +11,7 @@ dependencies = [
     "numpy>=1.24.0,<2.0.0",
     "pillow>=9.0.0",
     "psycopg2-binary>=2.9.10",
-    "tensorflow==2.16.0",
+    "streamlit>=1.48.0",
+    "tensorflow>=2.15.0",
     "werkzeug>=3.1.3",
 ]

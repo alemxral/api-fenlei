@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2025-08-08T13:05:41.361533",
+    "filename": "TS.PNG",
+    "request_type": "single",
+    "top_prediction": {
+      "class_name": "jersey",
+      "confidence": 0.7678855061531067,
+      "confidence_percentage": "76.79%"
+    },
+    "total_predictions": 5,
+    "all_predictions": [
+      {
+        "class_id": "n03595614",
+        "class_name": "jersey",
+        "confidence": 0.7678855061531067,
+        "confidence_percentage": "76.79%"
+      },
+      {
+        "class_id": "n02669723",
+        "class_name": "academic_gown",
+        "confidence": 0.0979747548699379,
+        "confidence_percentage": "9.80%"
+      },
+      {
+        "class_id": "n03787032",
+        "class_name": "mortarboard",
+        "confidence": 0.024988539516925812,
+        "confidence_percentage": "2.50%"
+      }
+    ],
+    "user_ip": "195.46.230.100, 10.82.7.170",
+    "processing_time": 1.276357889175415,
+    "date": "2025-08-08",
+    "time": "13:05:41"
+  }
+]
