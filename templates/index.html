@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
+
 <body>
     <div class="container py-4">
         <!-- Header -->
@@ -19,7 +21,7 @@
                         Image Classification API
                     </h1>
                     <p class="lead mb-2">Upload images to classify them using a pre-trained MobileNetV2 model</p>
-                    
+
                     <!-- Project Information -->
                     <div class="mb-4">
                         <div class="card bg-dark border-secondary">
@@ -33,7 +35,8 @@
                                         <strong>Subject:</strong> DLBDSMTP01 – Project: From Model to Production
                                     </small>
                                     <small class="d-block mb-1">
-                                        <strong>Task:</strong> Task 2: Image classification for a refund department (spotlight: Batch processing)
+                                        <strong>Task:</strong> Task 2: Image classification for a refund department
+                                        (spotlight: Batch processing)
                                     </small>
                                     <small class="d-block">
                                         <strong>Author:</strong> <span class="text-info">Alejandro Moral Aranda</span>
@@ -46,7 +49,7 @@
             </div>
         </div>
 
-        <!-- API Status -->
+        <!-- API Status. -->
         <div class="row mb-4">
             <div class="col">
                 <div class="card">
@@ -71,15 +74,15 @@
             <div class="col">
                 <ul class="nav nav-tabs" id="mainTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="classify-tab" data-bs-toggle="tab" 
-                                data-bs-target="#classify-panel" type="button" role="tab">
+                        <button class="nav-link active" id="classify-tab" data-bs-toggle="tab"
+                            data-bs-target="#classify-panel" type="button" role="tab">
                             <i class="fas fa-upload me-2"></i>
                             Image Classification
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" 
-                                data-bs-target="#history-panel" type="button" role="tab">
+                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-panel"
+                            type="button" role="tab">
                             <i class="fas fa-history me-2"></i>
                             Prediction History
                         </button>
@@ -95,113 +98,114 @@
                 <!-- Upload Forms -->
                 <div class="row">
                     <!-- Single Image Upload -->
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-image me-2"></i>
-                            Single Image Classification
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="single-upload-form">
-                            <div class="mb-3">
-                                <label for="single-image" class="form-label">Select Image</label>
-                                <input type="file" class="form-control" id="single-image" 
-                                       accept="image/*" required>
-                                <div class="form-text">
-                                    Supported formats: JPG, PNG, GIF, BMP, WEBP (max 16MB)
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-image me-2"></i>
+                                    Single Image Classification
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="single-upload-form">
+                                    <div class="mb-3">
+                                        <label for="single-image" class="form-label">Select Image</label>
+                                        <input type="file" class="form-control" id="single-image" accept="image/*"
+                                            required>
+                                        <div class="form-text">
+                                            Supported formats: JPG, PNG, GIF, BMP, WEBP (max 16MB)
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="single-top-k" class="form-label">Number of Predictions</label>
+                                        <select class="form-select" id="single-top-k">
+                                            <option value="3">Top 3</option>
+                                            <option value="5" selected>Top 5</option>
+                                            <option value="10">Top 10</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100" id="single-submit-btn">
+                                        <i class="fas fa-upload me-2"></i>
+                                        Classify Image
+                                    </button>
+                                </form>
+
+                                <!-- Single Image Preview -->
+                                <div id="single-preview" class="mt-3" style="display: none;">
+                                    <h6>Preview:</h6>
+                                    <img id="single-preview-img" class="img-fluid rounded" style="max-height: 200px;">
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="single-top-k" class="form-label">Number of Predictions</label>
-                                <select class="form-select" id="single-top-k">
-                                    <option value="3">Top 3</option>
-                                    <option value="5" selected>Top 5</option>
-                                    <option value="10">Top 10</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100" id="single-submit-btn">
-                                <i class="fas fa-upload me-2"></i>
-                                Classify Image
-                            </button>
-                        </form>
-
-                        <!-- Single Image Preview -->
-                        <div id="single-preview" class="mt-3" style="display: none;">
-                            <h6>Preview:</h6>
-                            <img id="single-preview-img" class="img-fluid rounded" style="max-height: 200px;">
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Batch Upload -->
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-images me-2"></i>
-                            Batch Image Classification
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="batch-upload-form">
-                            <div class="mb-3">
-                                <label for="batch-images" class="form-label">Select Images</label>
-                                <input type="file" class="form-control" id="batch-images" 
-                                       accept="image/*" multiple required>
-                                <div class="form-text">
-                                    Select up to 10 images (max 16MB each)
+                    <!-- Batch Upload -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-images me-2"></i>
+                                    Batch Image Classification
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="batch-upload-form">
+                                    <div class="mb-3">
+                                        <label for="batch-images" class="form-label">Select Images</label>
+                                        <input type="file" class="form-control" id="batch-images" accept="image/*"
+                                            multiple required>
+                                        <div class="form-text">
+                                            Select up to 10 images (max 16MB each)
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="batch-top-k" class="form-label">Number of Predictions per
+                                            Image</label>
+                                        <select class="form-select" id="batch-top-k">
+                                            <option value="3">Top 3</option>
+                                            <option value="5" selected>Top 5</option>
+                                            <option value="10">Top 10</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100" id="batch-submit-btn">
+                                        <i class="fas fa-upload me-2"></i>
+                                        Classify Images
+                                    </button>
+                                </form>
+
+                                <!-- Batch Image Count -->
+                                <div id="batch-count" class="mt-3" style="display: none;">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <span id="batch-count-text"></span>
+                                    </small>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="batch-top-k" class="form-label">Number of Predictions per Image</label>
-                                <select class="form-select" id="batch-top-k">
-                                    <option value="3">Top 3</option>
-                                    <option value="5" selected>Top 5</option>
-                                    <option value="10">Top 10</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100" id="batch-submit-btn">
-                                <i class="fas fa-upload me-2"></i>
-                                Classify Images
-                            </button>
-                        </form>
-
-                        <!-- Batch Image Count -->
-                        <div id="batch-count" class="mt-3" style="display: none;">
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                <span id="batch-count-text"></span>
-                            </small>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Results Section -->
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-chart-bar me-2"></i>
-                            Classification Results
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="results-container">
-                            <div class="text-center text-muted">
-                                <i class="fas fa-info-circle fa-2x mb-3"></i>
-                                <p>Upload an image above to see classification results</p>
+                <!-- Results Section -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Classification Results
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="results-container">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-info-circle fa-2x mb-3"></i>
+                                        <p>Upload an image above to see classification results</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
                 <!-- API Documentation -->
                 <div class="row mt-4">
@@ -430,8 +434,8 @@
             <div class="row">
                 <div class="col text-center">
                     <small class="text-muted">
-                        © 2025 Alejandro Moral Aranda | 
-                        Academic Project - DLBDSMTP01 | 
+                        © 2025 Alejandro Moral Aranda |
+                        Academic Project - DLBDSMTP01 |
                         <i class="fas fa-code me-1"></i> Built with Flask & TensorFlow
                     </small>
                 </div>
@@ -442,4 +446,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
+
 </html>

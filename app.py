@@ -15,7 +15,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 # Configure max file size (16MB)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-# Import and register API routes
+# Import and register API routes..
 from api_routes import api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
 

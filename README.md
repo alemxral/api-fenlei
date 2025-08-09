@@ -8,7 +8,7 @@
 ![Demo](demo.gif)
 
 
-A simple Flask REST API for image classification using a pre-trained MobileNetV2 model (TensorFlow/Keras). It includes a modern web interface, batch image processing, and solid error handling. You can run it on Replit, locally, Docker, or Railway.
+A simple Flask REST API for image classification using a pre-trained MobileNetV2 model (TensorFlow/Keras). It includes a modern web interface, batch image processing, and solid error handling. You can run it on a web hosting, locally, Docker, or Railway.
 
 ---
 

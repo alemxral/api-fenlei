@@ -15,34 +15,34 @@ api_bp = Blueprint('api', __name__)
 def classify_single_image():
     """
     Classify a single image
-    
+
     Expected request: multipart/form-data with 'image' file field
     Optional query parameter: top_k (default: 5)
     """
     try:
-        # Check if image file is provided
+        # Check if image file is provided.
         if 'image' not in request.files:
             return jsonify({
                 'error': 'No image provided',
                 'message': 'Please provide an image file in the "image" field'
             }), 400
-        
+
         file = request.files['image']
-        
+
         # Check if file is selected
         if file.filename == '':
             return jsonify({
                 'error': 'No file selected',
                 'message': 'Please select a file to upload'
             }), 400
-        
+
         # Validate file
         if not allowed_file(file.filename):
             return jsonify({
                 'error': 'Invalid file format',
                 'message': 'Please upload a valid image file (JPG, JPEG, PNG, GIF, BMP, WEBP)'
             }), 400
-        
+
         # Validate file content
         try:
             validate_image_file(file)
@@ -51,21 +51,21 @@ def classify_single_image():
                 'error': 'Invalid image',
                 'message': str(e)
             }), 400
-        
+
         # Get top_k parameter
         top_k = request.args.get('top_k', default=5, type=int)
         if top_k <= 0 or top_k > 10:
             top_k = 5
-        
+
         # Reset file pointer after validation
         file.seek(0)
-        
+
         # Classify the image
         try:
             start_time = time.time()
             predictions = classifier.classify_image(file, top_k=top_k)
             processing_time = time.time() - start_time
-            
+
             # Log the prediction
             user_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.environ.get('REMOTE_ADDR'))
             prediction_logger.log_prediction(
@@ -75,21 +75,21 @@ def classify_single_image():
                 user_ip=user_ip,
                 processing_time=processing_time
             )
-            
+
             return jsonify({
                 'status': 'success',
                 'filename': secure_filename(file.filename or 'unknown'),
                 'predictions': predictions,
                 'total_predictions': len(predictions)
             }), 200
-            
+
         except Exception as e:
             logger.error(f"Classification error: {str(e)}")
             return jsonify({
                 'error': 'Classification failed',
                 'message': f'Error during image classification: {str(e)}'
             }), 500
-    
+
     except Exception as e:
         logger.error(f"Unexpected error in classify_single_image: {str(e)}")
         return jsonify({
@@ -101,7 +101,7 @@ def classify_single_image():
 def classify_batch_images():
     """
     Classify multiple images
-    
+
     Expected request: multipart/form-data with multiple 'images' file fields
     Optional query parameter: top_k (default: 5)
     """
@@ -112,31 +112,31 @@ def classify_batch_images():
                 'error': 'No images provided',
                 'message': 'Please provide image files in the "images" field'
             }), 400
-        
+
         files = request.files.getlist('images')
-        
+
         # Check if files are selected
         if not files or all(f.filename == '' for f in files):
             return jsonify({
                 'error': 'No files selected',
                 'message': 'Please select files to upload'
             }), 400
-        
+
         # Validate maximum number of files (limit to 10 for performance)
         if len(files) > 10:
             return jsonify({
                 'error': 'Too many files',
                 'message': 'Maximum 10 files allowed per batch request'
             }), 400
-        
+
         # Validate each file
         valid_files = []
         invalid_files = []
-        
+
         for i, file in enumerate(files):
             if file.filename == '':
                 continue
-                
+
             if not allowed_file(file.filename):
                 invalid_files.append({
                     'index': i,
@@ -144,7 +144,7 @@ def classify_batch_images():
                     'error': 'Invalid file format'
                 })
                 continue
-            
+
             try:
                 validate_image_file(file)
                 valid_files.append(file)
@@ -154,25 +154,25 @@ def classify_batch_images():
                     'filename': file.filename,
                     'error': str(e)
                 })
-        
+
         if not valid_files:
             return jsonify({
                 'error': 'No valid images',
                 'message': 'All provided files are invalid or corrupted',
                 'invalid_files': invalid_files
             }), 400
-        
+
         # Get top_k parameter
         top_k = request.args.get('top_k', default=5, type=int)
         if top_k <= 0 or top_k > 10:
             top_k = 5
-        
+
         # Classify the images
         try:
             start_time = time.time()
             results = classifier.classify_batch(valid_files, top_k=top_k)
             processing_time = time.time() - start_time
-            
+
             # Log the batch predictions
             user_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.environ.get('REMOTE_ADDR'))
             prediction_logger.log_batch_predictions(
@@ -180,7 +180,7 @@ def classify_batch_images():
                 user_ip=user_ip,
                 processing_time=processing_time
             )
-            
+
             return jsonify({
                 'status': 'success',
                 'total_images': len(files),
@@ -189,14 +189,14 @@ def classify_batch_images():
                 'results': results,
                 'invalid_files': invalid_files if invalid_files else None
             }), 200
-            
+
         except Exception as e:
             logger.error(f"Batch classification error: {str(e)}")
             return jsonify({
                 'error': 'Batch classification failed',
                 'message': f'Error during batch image classification: {str(e)}'
             }), 500
-    
+
     except Exception as e:
         logger.error(f"Unexpected error in classify_batch_images: {str(e)}")
         return jsonify({
@@ -214,13 +214,13 @@ def health_check():
                 'status': 'unhealthy',
                 'message': 'ML model not loaded'
             }), 503
-        
+
         return jsonify({
             'status': 'healthy',
             'message': 'API is operational',
             'model': 'MobileNetV2'
         }), 200
-        
+
     except Exception as e:
         logger.error(f"Health check error: {str(e)}")
         return jsonify({
@@ -276,17 +276,17 @@ def get_prediction_logs():
     try:
         limit = request.args.get('limit', default=50, type=int)
         limit = min(limit, 500)  # Cap at 500 to prevent large responses
-        
+
         logs = prediction_logger.get_recent_logs(limit)
         statistics = prediction_logger.get_statistics()
-        
+
         return jsonify({
             'status': 'success',
             'logs': logs,
             'statistics': statistics,
             'total_logs': len(logs)
         }), 200
-        
+
     except Exception as e:
         logger.error(f"Error retrieving logs: {str(e)}")
         return jsonify({
@@ -299,12 +299,12 @@ def get_prediction_statistics():
     """Get prediction statistics"""
     try:
         statistics = prediction_logger.get_statistics()
-        
+
         return jsonify({
             'status': 'success',
             'statistics': statistics
         }), 200
-        
+
     except Exception as e:
         logger.error(f"Error retrieving statistics: {str(e)}")
         return jsonify({
@@ -317,7 +317,7 @@ def clear_prediction_logs():
     """Clear all prediction logs (admin function)"""
     try:
         success = prediction_logger.clear_logs()
-        
+
         if success:
             return jsonify({
                 'status': 'success',
@@ -328,7 +328,7 @@ def clear_prediction_logs():
                 'error': 'Failed to clear logs',
                 'message': 'Could not clear prediction logs'
             }), 500
-            
+
     except Exception as e:
         logger.error(f"Error clearing logs: {str(e)}")
         return jsonify({

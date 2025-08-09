@@ -56,7 +56,7 @@ class ImageClassificationApp {
 
     async checkApiHealth() {
         const statusElement = document.getElementById('api-status');
-        
+
         try {
             const response = await fetch(`${this.apiBaseUrl}/health`);
             const data = await response.json();
@@ -100,7 +100,7 @@ class ImageClassificationApp {
         if (count > 0) {
             batchCountText.textContent = `${count} image${count > 1 ? 's' : ''} selected`;
             batchCount.style.display = 'block';
-            
+
             if (count > 10) {
                 batchCountText.innerHTML = `
                     <span class="text-warning">
@@ -196,7 +196,7 @@ class ImageClassificationApp {
 
     displaySingleResult(data) {
         const container = document.getElementById('results-container');
-        
+
         const resultHtml = `
             <div class="card result-card fade-in">
                 <div class="card-header">
@@ -235,7 +235,7 @@ class ImageClassificationApp {
 
     displayBatchResults(data) {
         const container = document.getElementById('results-container');
-        
+
         let resultHtml = `
             <div class="card batch-result-card fade-in">
                 <div class="card-header">
@@ -270,7 +270,7 @@ class ImageClassificationApp {
         // Display results for each image
         if (data.results && data.results.length > 0) {
             resultHtml += '<div class="row">';
-            
+
             data.results.forEach((result, index) => {
                 if (result.status === 'success') {
                     resultHtml += `
@@ -311,7 +311,7 @@ class ImageClassificationApp {
                     `;
                 }
             });
-            
+
             resultHtml += '</div>';
         }
 
@@ -376,7 +376,7 @@ class ImageClassificationApp {
     async loadPredictionHistory() {
         const tableBody = document.getElementById('history-table-body');
         const limit = document.getElementById('history-limit').value;
-        
+
         // Show loading state
         tableBody.innerHTML = `
             <tr>
@@ -432,7 +432,7 @@ class ImageClassificationApp {
             const processingTime = log.processing_time ? `${(log.processing_time * 1000).toFixed(0)}ms` : 'N/A';
             const userIp = log.user_ip || 'N/A';
             const confidence = log.top_prediction.confidence_percentage || '0.00%';
-            
+
             // Color code confidence
             let confidenceClass = 'text-danger';
             const confValue = parseFloat(confidence);
@@ -449,7 +449,7 @@ class ImageClassificationApp {
                         <small>${timestamp}</small>
                     </td>
                     <td>
-                        <span class="text-truncate" style="max-width: 150px; display: inline-block;" 
+                        <span class="text-truncate" style="max-width: 150px; display: inline-block;"
                               title="${log.filename}">
                             ${log.filename}
                         </span>
@@ -504,7 +504,7 @@ class ImageClassificationApp {
             if (response.ok) {
                 // Reload the history to show empty state
                 this.loadPredictionHistory();
-                
+
                 // Show success message
                 const tableBody = document.getElementById('history-table-body');
                 tableBody.innerHTML = `
@@ -540,7 +540,7 @@ class ImageClassificationApp {
     }
 }
 
-// Initialize the app when the DOM is loaded
+// Initialize the app when the DOM .is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new ImageClassificationApp();
 });
