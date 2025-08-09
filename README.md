@@ -5,9 +5,7 @@
 > (Hosted on Railway — free plan; the first request may be slow after inactivity)
 
 
-<video src="video.webm" controls width="600">
-  Your browser does not support the video tag.
-</video>
+![Demo](demo.gif)
 
 
 A simple Flask REST API for image classification using a pre-trained MobileNetV2 model (TensorFlow/Keras). It includes a modern web interface, batch image processing, and solid error handling. You can run it on Replit, locally, Docker, or Railway.
