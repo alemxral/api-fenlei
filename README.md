@@ -299,7 +299,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
 
 - Author: Alejandro Moral Aranda
 - Academic Subject: DLBDSMTP01 – Task 2: Image classification for a refund department (focus: batch processing)
-- Institution: Academic project for machine learning deployment course
+- Institution: IU University
 - Status: ✅ Complete & running (Production-ready)
 - Last Updated: August 4, 2025
 - Version: 1.0.0
