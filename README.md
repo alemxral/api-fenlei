@@ -1,41 +1,41 @@
 # Image Classification API
 
-A Flask REST API with integrated machine learning image classification using pre-trained MobileNetV2 model from TensorFlow/Keras.
+> **Live Web Version:**
+> Try it online now: [https://api-fenlei-production.up.railway.app/](https://api-fenlei-production.up.railway.app/)
+> *(Hosted on Railway – free plan)*
 
-## Features
+![Web Interface Screenshot](screenshot.png)
 
-- **Single Image Classification**: Upload and classify individual images
-- **Batch Classification**: Process up to 10 images simultaneously
-- **Web Interface**: Beautiful Bootstrap-based UI for easy interaction
-- **REST API**: Well-documented endpoints for programmatic access
-- **Multiple Formats**: Supports JPG, PNG, GIF, BMP, WEBP images
-- **Confidence Scores**: Returns top predictions with confidence percentages
-- **Error Handling**: Comprehensive validation and error responses
+A simple Flask REST API for image classification using a pre-trained MobileNetV2 model (TensorFlow/Keras). Includes a modern web interface, batch image processing, and robust error handling. Designed for easy deployment on Replit, local servers, Docker, or Railway.
+
+---
 
 ## Quick Start
 
+### Try Online
+- Visit the live server: [https://api-fenlei-production.up.railway.app/](https://api-fenlei-production.up.railway.app/)
+
 ### On Replit
-The application is already configured and running. Just click the "Run" button!
+- The app is pre-configured and running; just hit **Run**!
 
 ### Local Installation
 
 1. **Clone or download the project**
-2. **Create requirements.txt** (copy from dependencies.txt):
+2. **Set up requirements**:
    ```bash
    cp dependencies.txt requirements.txt
    ```
-
 3. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
-
 4. **Run the application**:
    ```bash
    python main.py
    ```
+5. **Open your browser** at [http://localhost:5000](http://localhost:5000)
 
-5. **Open your browser** to `http://localhost:5000`
+---
 
 ## API Endpoints
 
@@ -63,53 +63,16 @@ GET /api/health
 GET /api/info
 ```
 
-## File Limits
+---
 
-- **Maximum file size**: 16MB per image
-- **Maximum batch size**: 10 images
-- **Supported dimensions**: 32x32 to 4096x4096 pixels
-- **Supported formats**: JPG, JPEG, PNG, GIF, BMP, WEBP
+## File & Usage Limits
 
-## Testing with PowerShell
+- **Max file size**: 16MB/image
+- **Max batch size**: 10 images
+- **Supported dimensions**: 32x32 to 4096x4096 px
+- **Formats**: JPG, JPEG, PNG, GIF, BMP, WEBP
 
-Use the included PowerShell script to test the API:
-
-```powershell
-.\test_api.ps1 -ImagePath "path\to\image.jpg" -ApiUrl "http://localhost:5000"
-```
-
-## Project Structure
-
-```
-├── app.py              # Main Flask application
-├── main.py             # Application entry point
-├── ml_classifier.py    # TensorFlow/Keras ML model handler
-├── api_routes.py       # REST API endpoints
-├── utils.py            # Helper functions and validation
-├── templates/
-│   └── index.html      # Web interface
-├── static/
-│   ├── css/style.css   # Custom styles
-│   └── js/app.js       # Frontend JavaScript
-├── test_api.ps1        # PowerShell testing script
-└── dependencies.txt    # Python package requirements
-```
-
-## Technology Stack
-
-- **Backend**: Flask, Python 3.11
-- **ML Framework**: TensorFlow 2.18+, Keras
-- **Model**: MobileNetV2 (ImageNet weights)
-- **Frontend**: Bootstrap 5, Vanilla JavaScript
-- **Image Processing**: Pillow (PIL)
-- **Server**: Gunicorn
-
-## Model Information
-
-- **Architecture**: MobileNetV2
-- **Training Dataset**: ImageNet (1000 classes)
-- **Input Size**: 224x224 pixels
-- **Output**: Top-K predictions with confidence scores
+---
 
 ## Example Response
 
@@ -135,24 +98,194 @@ Use the included PowerShell script to test the API:
 }
 ```
 
-## Error Handling
+---
 
-The API provides detailed error messages for:
-- Invalid file formats
-- File size violations
-- Corrupted images
-- Server errors
-- Missing parameters
+## Testing
 
-## Development
+### PowerShell
+```powershell
+.\test_api.ps1 -ImagePath "path\to\image.jpg" -ApiUrl "http://localhost:5000"
+```
 
-To modify or extend the application:
+### curl
+```bash
+# Health check
+curl http://localhost:5000/api/health
 
-1. **Add new endpoints** in `api_routes.py`
-2. **Modify ML logic** in `ml_classifier.py`
-3. **Update UI** in `templates/index.html` and `static/`
-4. **Add validation** in `utils.py`
+# Single image classification
+curl -X POST -F "image=@path/to/image.jpg" -F "top_k=5" \
+     http://localhost:5000/api/classify
+
+# API information
+curl http://localhost:5000/api/info
+```
+
+---
+
+## Project Structure
+
+```
+├── app.py              # Main Flask application
+├── main.py             # Application entry point
+├── ml_classifier.py    # TensorFlow/Keras ML model handler
+├── api_routes.py       # REST API endpoints
+├── utils.py            # Helper functions and validation
+├── templates/
+│   └── index.html      # Web interface
+├── static/
+│   ├── css/style.css   # Custom styles
+│   └── js/app.js       # Frontend JavaScript
+├── test_api.ps1        # PowerShell testing script
+└── dependencies.txt    # Python package requirements
+```
+
+---
+
+## Technology & Architecture
+
+### Backend
+- **Flask** (Blueprint pattern)
+- **RESTful API** with clear error responses
+- **Image Processing**: Pillow (PIL)
+- **Model**: MobileNetV2 (ImageNet weights), loaded/cached at startup
+- **ProxyFix** middleware for reverse proxy headers
+
+### Frontend
+- **Bootstrap 5** (dark theme, responsive)
+- **Vanilla JavaScript** (file upload, live preview, API calls)
+- **Mobile-friendly** design
+
+### File Handling
+- Secure filename checks
+- Multi-layer validation (file type, size, dimensions, content)
+- No persistent storage; all processing in-memory
+
+### Machine Learning
+- **TensorFlow 2.18+**, **Keras**
+- **Input size**: 224x224 px (auto-resized)
+- **Output**: Top-K predictions with confidence scores
+
+### Deployment
+- **Gunicorn** for production server
+- **WSGI** standard interface
+- **Docker** support (see below)
+- **Railway** for free cloud hosting
+
+---
+
+## Model Information
+
+- **Architecture**: MobileNetV2
+- **Trained on**: ImageNet (1000 classes)
+- **Input**: 224x224 px RGB images
+- **Output**: Top-K predictions, confidence scores
+
+---
+
+## Troubleshooting
+
+### Common Issues
+1. **TensorFlow errors**:
+   - Ensure NumPy version is compatible: `pip install "numpy>=1.24.0,<2.0.0"`
+   - Upgrade TensorFlow: `pip install --upgrade tensorflow>=2.15.0`
+2. **Port in use**:
+   - Change port in `main.py`
+   - Kill processes: `pkill -f "python main.py"`
+3. **Memory problems**:
+   - Lower batch size
+   - Make sure your machine has enough RAM
+4. **File upload issues**:
+   - Check file size and format
+   - Verify permissions
+
+### Performance Tips
+- Model loads/caches at startup (first prediction may be slower)
+- Large images resized automatically, processed in memory
+- Use multiple Gunicorn workers for heavy load
+
+---
+
+## Development Guidelines
+
+- Organize routes with Flask Blueprints
+- Keep ML logic in `ml_classifier.py`
+- UI updates in `templates/` & `static/`
+- Add validation in `utils.py`
+- Pin major package versions in `dependencies.txt`
+- Use `.env` for secrets/config (see below)
+
+### Adding Features
+1. **Endpoints**: `api_routes.py`
+2. **ML changes**: `ml_classifier.py`
+3. **UI**: `templates/`, `static/`
+4. **Validation**: `utils.py`
+
+---
+
+## Setup & Deployment
+
+### Local Development
+
+#### Prerequisites
+- Python 3.11+
+- pip (Python package manager)
+- (Recommended) Virtual environment
+
+#### Steps
+
+1. **Download the project**
+2. **Create and activate a virtual environment**
+   ```bash
+   python -m venv venv
+   # Windows:
+   venv\Scripts\activate
+   # macOS/Linux:
+   source venv/bin/activate
+   ```
+3. **Install dependencies**
+   ```bash
+   cp dependencies.txt requirements.txt
+   pip install -r requirements.txt
+   ```
+4. **Environment variables** (optional, for secrets/config)
+   ```bash
+   echo "SESSION_SECRET=your-secret-key-here" > .env
+   ```
+5. **Run the app**
+   ```bash
+   python main.py
+   # Production (recommended):
+   gunicorn --bind 0.0.0.0:5000 main:app
+   ```
+
+### Docker Deployment
+
+Create a `Dockerfile`:
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+```
+
+---
+
+## Attribution & Info
+
+- **Author**: Alejandro Moral Aranda
+- **Institution**: Academic project for machine learning deployment course
+- **Course/Subject**: DLBDSMTP01 – Task 2: Batch image classification for refund department
+- **Status**: ✅ Complete & running (Production-ready)
+- **Last updated**: August 4, 2025
+- **Version**: 1.0.0
+- **Preferred communication**: Simple, everyday language
+
+---
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is open source under the MIT License.
