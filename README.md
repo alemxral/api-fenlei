@@ -9,7 +9,6 @@
   Your browser does not support the video tag.
 </video>
 
-![Web Interface Screenshot](screenshot.png)
 
 A simple Flask REST API for image classification using a pre-trained MobileNetV2 model (TensorFlow/Keras). It includes a modern web interface, batch image processing, and solid error handling. You can run it on Replit, locally, Docker, or Railway.
 
