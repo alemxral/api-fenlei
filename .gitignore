@@ -1,0 +1,78 @@
+# --- Python cache/bytecode ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Native extensions
+*.so
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+*.venv/
+
+# --- Packaging / build ---
+build/
+dist/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+
+# --- Logs, caches, test artifacts ---
+*.log
+.cache/
+.pytest_cache/
+.tox/
+.mypy_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+htmlcov/
+
+# --- OS / Editor / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.code-workspace
+
+# --- App data (temporary) ---
+# App can write temporary JSON history; don't track in git
+data/*.json
+data/**/*.json
+
+# --- Environment / secrets ---
+.env
+.env.*
+*.env
+.envrc
+
+
+.local/
+repl_state.bin
+rapid_build_*
+.latest.json
+
+# --- Devcontainer (uncomment to ignore if you don't use VS Code Dev Containers) ---
+#.devcontainer/
+
+# --- TensorFlow / Keras caches (usually outside repo, but safe to ignore) ---
+.keras/
+.tensorflow/
+
+# --- Node / Frontend (if any) ---
+node_modules/
+*.map
+
+# --- Nix / direnv (if used locally) ---
+.direnv/
+.nix-*
+
+# --- UV package manager ---
+uv.lock
+.uv/
