@@ -76,6 +76,9 @@ GET /api/info
 
 ## Example Response
 
+curl -X POST -F "image=@$HOME/Downloads/workflow.png" https://api-fenlei-production.up.railway.app/api/classify
+
+
 ```json
 {
   "status": "success",
